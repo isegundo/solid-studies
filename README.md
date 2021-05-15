@@ -1,4 +1,5 @@
 # solid-studies
 
-Studiyng SOLID principles.
+Studying SOLID principles.
 
+Using tests only, no main(). 
