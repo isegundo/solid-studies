@@ -1,7 +1,6 @@
 package com.isegundo.studies.solid.hr;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 public class Employee {
@@ -11,22 +10,9 @@ public class Employee {
     private BigDecimal salary;
     private LocalDate lastSalaryUpdate;
 
-    public void increaseSalary(BigDecimal salaryIncrease) {
-        if (salaryIncrease.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ValidationException("Salary increase must be greater than zero");
-        }
-
-        var newSalary = this.salary.add(salaryIncrease);
-
-        var percentVariation = newSalary.divide(this.salary, RoundingMode.HALF_UP).subtract(BigDecimal.ONE);
-
-        if (percentVariation.compareTo(new BigDecimal("0.40")) > 0) {
-            throw new ValidationException("Salary increase cannot be higher than 40%");
-        }
-
-        this.salary = newSalary;
+    public void updateSalary(BigDecimal salaryAmount) {
+        this.salary = salaryAmount;
         this.lastSalaryUpdate = LocalDate.now();
-
     }
 
 

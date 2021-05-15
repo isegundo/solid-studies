@@ -8,11 +8,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class EmployeeTest {
+class SalaryServiceTest {
 
     private Employee employee;
+    private SalaryService salaryService = new SalaryService();
 
     @BeforeEach
     void setup() {
@@ -33,12 +35,11 @@ class EmployeeTest {
         var salaryIncrease = new BigDecimal(increase);
 
         // Act
-        employee.increaseSalary(salaryIncrease);
+        salaryService.increaseEmployeeSalary(this.employee, salaryIncrease);
 
         // Assert
         assertEquals(new BigDecimal(resultSalary), employee.getSalary());
     }
-
 
 
     @Test
@@ -48,11 +49,10 @@ class EmployeeTest {
 
         // Act and Assert
         var exception = assertThrows(ValidationException.class,
-                () -> employee.increaseSalary(salaryIncrease)
+                () -> salaryService.increaseEmployeeSalary(this.employee, salaryIncrease)
         );
         assertEquals("Salary increase cannot be higher than 40%", exception.getMessage());
     }
-
 
 
     @DisplayName("Zero or lower salary increase")
@@ -67,7 +67,7 @@ class EmployeeTest {
 
         // Act and Assert
         var exception = assertThrows(ValidationException.class,
-                () -> employee.increaseSalary(salaryIncrease)
+                () -> salaryService.increaseEmployeeSalary(this.employee, salaryIncrease)
         );
         assertEquals("Salary increase must be greater than zero", exception.getMessage());
     }
