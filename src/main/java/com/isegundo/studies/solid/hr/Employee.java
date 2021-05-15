@@ -40,6 +40,11 @@ public class Employee {
         this.salary = salary;
     }
 
+
+    public void setLastSalaryUpdate(LocalDate lastSalaryUpdate) {
+        this.lastSalaryUpdate = lastSalaryUpdate;
+    }
+
     public LocalDate getLastSalaryUpdate() {
         return lastSalaryUpdate;
     }

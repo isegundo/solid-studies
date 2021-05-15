@@ -7,6 +7,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,7 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SalaryServiceTest {
 
     private Employee employee;
-    private SalaryService salaryService = new SalaryService();
+    private SalaryService salaryService;
+
+    public SalaryServiceTest() {
+        var validators = Arrays.asList(
+                new PercentageValidation(),
+                new PeriodicityValidation(),
+                new PositiveIncreaseValidation());
+
+        salaryService = new SalaryService(validators);
+    }
 
     @BeforeEach
     void setup() {
@@ -22,6 +34,7 @@ class SalaryServiceTest {
         this.employee.setFirstName("John");
         this.employee.setLastName("Doe");
         this.employee.setSalary(new BigDecimal("1000.00"));
+        this.employee.setLastSalaryUpdate(LocalDate.now().minus(7, ChronoUnit.MONTHS));
     }
 
     @DisplayName("Valid salary increase")
@@ -70,6 +83,20 @@ class SalaryServiceTest {
                 () -> salaryService.increaseEmployeeSalary(this.employee, salaryIncrease)
         );
         assertEquals("Salary increase must be greater than zero", exception.getMessage());
+    }
+
+
+    @Test
+    void increaseSalary_before_6_months_from_last() {
+        // Arrange
+        var salaryIncrease = new BigDecimal("300.00");
+        this.employee.setLastSalaryUpdate(LocalDate.now().minus(4, ChronoUnit.MONTHS));
+
+        // Act and Assert
+        var exception = assertThrows(ValidationException.class,
+                () -> salaryService.increaseEmployeeSalary(this.employee, salaryIncrease)
+        );
+        assertEquals("Salary can only be increased 6 months after the last update", exception.getMessage());
     }
 
 }

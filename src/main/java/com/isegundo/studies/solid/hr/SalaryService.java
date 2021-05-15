@@ -1,26 +1,23 @@
 package com.isegundo.studies.solid.hr;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.List;
 
 public class SalaryService {
 
-    public void increaseEmployeeSalary(Employee employee, BigDecimal increaseAmount){
-        var employeeSalary = employee.getSalary();
+    private final List<ValidationSalaryIncrease> validators;
 
-        if (increaseAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ValidationException("Salary increase must be greater than zero");
-        }
-
-        var newSalary = employeeSalary.add(increaseAmount);
-
-        var percentVariation = newSalary.divide(employeeSalary, RoundingMode.HALF_UP).subtract(BigDecimal.ONE);
-
-        if (percentVariation.compareTo(new BigDecimal("0.40")) > 0) {
-            throw new ValidationException("Salary increase cannot be higher than 40%");
-        }
-
-        employee.updateSalary(newSalary);
-
+    public SalaryService(List<ValidationSalaryIncrease> validators) {
+        this.validators = validators;
     }
+
+    public void increaseEmployeeSalary(Employee employee, BigDecimal increaseAmount) {
+
+        validators.forEach(v -> v.validate(employee, increaseAmount));
+
+        var employeeSalary = employee.getSalary();
+        var newSalary = employeeSalary.add(increaseAmount);
+        employee.updateSalary(newSalary);
+    }
+
 }
