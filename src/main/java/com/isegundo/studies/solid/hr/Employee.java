@@ -7,8 +7,11 @@ public class Employee {
     private String firstName;
     private String lastName;
 
+    private Position position;
+
     private BigDecimal salary;
     private LocalDate lastSalaryUpdate;
+
 
     public void updateSalary(BigDecimal salaryAmount) {
         this.salary = salaryAmount;
@@ -49,4 +52,11 @@ public class Employee {
         return lastSalaryUpdate;
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 }

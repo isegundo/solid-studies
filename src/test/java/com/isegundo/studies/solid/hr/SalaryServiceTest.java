@@ -1,5 +1,9 @@
 package com.isegundo.studies.solid.hr;
 
+import com.isegundo.studies.solid.hr.salary.PercentageValidation;
+import com.isegundo.studies.solid.hr.salary.PeriodicityValidation;
+import com.isegundo.studies.solid.hr.salary.PositiveIncreaseValidation;
+import com.isegundo.studies.solid.hr.salary.SalaryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +37,7 @@ class SalaryServiceTest {
         this.employee = new Employee();
         this.employee.setFirstName("John");
         this.employee.setLastName("Doe");
+        this.employee.setPosition(Position.SPECIALIST);
         this.employee.setSalary(new BigDecimal("1000.00"));
         this.employee.setLastSalaryUpdate(LocalDate.now().minus(7, ChronoUnit.MONTHS));
     }
